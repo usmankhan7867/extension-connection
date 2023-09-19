@@ -65,7 +65,7 @@ function App() {
     window.addEventListener("message", handleMessage);
   }, []);
 
-  const handleMessage = (event) => {
+  const handleMessage =async (event) => {
     if (event.data && event.data.SoccorWallet) {
       console.log("object",event.data.SoccorWallet)
       const soccorWalletData = event.data.SoccorWallet;
@@ -74,8 +74,14 @@ function App() {
         _to: address,
         amount: 1000
       }
-      chrome.runtime.sendMessage(soccorWalletData.extensionID,{ action: "connected",data:{contract:address,abi:abi,params:params} });
-    } else {
+      // chrome.runtime.sendMessage(soccorWalletData.extensionID,{ action: "isConnected" },(data)=>{console.log("hellooo",data)})
+      chrome.runtime.sendMessage(soccorWalletData.extensionID,{ action: "connect" },(data)=>{console.log("hellooo",data)})
+      // chrome.runtime.sendMessage(soccorWalletData.extensionID,{ action: "disconnect" },(data)=>{console.log("hellooo",data)})
+     
+      // chrome.runtime.sendMessage(soccorWalletData.extensionID,{ action: "connect"},(data)=>{console.log("hellooo",data)})
+      // chrome.runtime.sendMessage(soccorWalletData.extensionID,{ action: "sendTransaction",data:{contract:address,functionName:"transfer",abi:abi,params:params}},(data)=>{console.log("hellooo",data)})
+    } else 
+    {
       console.log("Could not find extension. Dowload from XYZ")
     }
   };
@@ -83,8 +89,6 @@ function App() {
     <>
       <Navbar
         wallet={wallet}
-        connectWallet={handleConnectWallet}
-        disconnectWallet={handleDisconnectWallet}
       />
       <button>Open Extenion</button>
 <button id="open-popup-button">Open Extension Popup</button>
